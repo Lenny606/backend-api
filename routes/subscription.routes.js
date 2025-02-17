@@ -2,14 +2,14 @@ import {Router} from 'express';
 
 const subscriptionRouter = Router()
 
-subscriptionRouter.get('/', getSubscriptions)
-subscriptionRouter.get('/:id', getSubscription)
-subscriptionRouter.get('/user/:id', getSubscription)
-subscriptionRouter.get('/:id', getSubscription)
-subscriptionRouter.get('/upcoming-renewals', getUpcomingRenewals)
-subscriptionRouter.post('/', getSubscription)
-subscriptionRouter.put('/:id', getSubscription)
-subscriptionRouter.put('/:id/cancel', cancelSubscription)
-subscriptionRouter.delete('/:id', deleteSubscription)
+subscriptionRouter.get('/', () => { res.send("hello")})
+subscriptionRouter.get('/:id', () => { res.send("hello")})
+subscriptionRouter.get('/user/:id', () => { res.send("hello")})
+subscriptionRouter.get('/:id', () => { res.send("hello")})
+subscriptionRouter.get('/upcoming-renewals',() => { res.send("hello")})
+subscriptionRouter.post('/', () => { res.send("hello")})
+subscriptionRouter.put('/:id', () => { res.send("hello")})
+subscriptionRouter.put('/:id/cancel', () => { res.send("hello")})
+subscriptionRouter.delete('/:id', () => { res.send("hello")})
 
 export default subscriptionRouter;
