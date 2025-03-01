@@ -50,6 +50,19 @@ const subscriptionSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Pre-save hook to calculate nextPaymentDate if missing
+subscriptionSchema.pre('save', function(next) {
+  if (!this.nextPaymentDate && this.endDate) {
+    // Assuming the renewal period is monthly
+    const renewalPeriod = 30 * 24 * 60 * 60 * 1000; // 30 days in milliseconds
+    this.nextPaymentDate = new Date(this.endDate.getTime() + renewalPeriod);
+  }
+  if (this.nextPaymentDate < new Date()) {
+    this.status = "expired"
+  }
+  next();
+});
+
 // Index to improve query performance
 subscriptionSchema.index({ user: 1, status: 1 });
 
