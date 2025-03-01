@@ -6,6 +6,12 @@ import {PORT} from './env.js'
 
 const app = express()
 
+//MW
+app.use(express.json())
+app.use(cookieParser())
+app.use(express.urlencode({ extended: false}))
+app.use(errorMiddleware)
+
 //ROUTES
 import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
