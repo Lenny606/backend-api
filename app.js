@@ -1,22 +1,22 @@
 import express from 'express';
-import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
 import {PORT} from './env.js'
+import {connectDB} from "./database/db.js";
+import {errorMiddleware} from "./middleware/error.middleware.js";
 
 const app = express()
 
 //MW
 app.use(express.json())
 app.use(cookieParser())
-app.use(express.urlencode({ extended: false}))
+app.use(express.urlencoded({ extended: false}))
 app.use(errorMiddleware)
 
 //ROUTES
 import userRouter from "./routes/user.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import subscriptionRouter from "./routes/subscription.routes.js";
-import {connectDB} from "./database/db.js";
+
 
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/users", userRouter)
