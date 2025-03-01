@@ -5,7 +5,6 @@ import {connectDB} from "./database/db.js";
 import {errorMiddleware} from "./middleware/error.middleware.js";
 
 const app = express()
-//BAD CODE !!!!!!!!!!!!!!!
 
 //MW
 app.use(express.json())
