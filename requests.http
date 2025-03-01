@@ -12,3 +12,12 @@ Content-Type: application/json
   "password": "password123",
   "username": "test API 12"
 }
+###
+POST http://localhost:3000/api/v1/auth/sign-in
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "testAPI12@example.com",
+  "password": "password123"
+}

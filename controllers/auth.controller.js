@@ -53,6 +53,44 @@ export const signUp = async (req, res, next) => {
 }
 
 export const signIn = async (req, res, next) => {
+
+    try {
+        const {email, password} = req.body;
+
+        const user = await User.findOne({ email }).select('+password');
+console.log(user);
+        if (!user) {
+            const err = new Error(`User not found`)
+            err.status = 404;
+            throw err
+        }
+
+        //security check
+        const isValid = await User.correctPassword(password, user.password)
+        if (!isValid) {
+            const err = new Error(`User has invalid password`)
+            err.status = 401;
+            throw err
+        }
+
+        const token = jwt.sign({userId: user._id}, JWT_SECRET, {expiresIn: JWT_EXPIRES_IN})
+
+
+        //response
+        res.status(200).json({
+            success: true,
+            message: 'User created successfully',
+            data: {
+                token,
+                user: user
+            }
+
+        })
+
+    } catch (err) {
+
+        next(err)
+    }
 }
 
 export const signOut = async (req, res, next) => {

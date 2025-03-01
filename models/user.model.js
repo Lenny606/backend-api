@@ -48,7 +48,7 @@ userSchema.pre('save', async function (next) {
 });
 
 // Instance method to check if provided password is correct
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
+userSchema.statics.correctPassword = async function (candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
 };
 
