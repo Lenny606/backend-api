@@ -2,7 +2,7 @@ import arcjet from 'arcjet';
 
 export const arcjetMiddleware = async (req, res, next) => {
     try {
-        const decision = await arcjet.protect(req);
+        const decision = await arcjet.protect(req, { requested: 1});
 
         if ( decision.isDenied()) {
            if( decision.reason.isRateLimit()) {
