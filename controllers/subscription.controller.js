@@ -6,6 +6,21 @@ export const createSubscription = async (req, res, next) => {
             ...req.body,
             user: req.user._id,
         })
+
+        const { workflowRunId } = await workflowClient.trigger(
+            {
+                url: `${SERVER_URL}/api/v1/workflows/subscription/reminder`,
+                body: {
+                    subscriptionId: subscription.id
+                },
+                headers: {
+                    'content-type': "application/json"
+                },
+                retries: 0
+            }
+        )
+
+
         res.status(201).json({
             success: true,
             message: "Subscription created successfully",
@@ -17,12 +32,12 @@ export const createSubscription = async (req, res, next) => {
 }
 export const getSubscriptionsByUser = async (req, res, next) => {
     try {
-if (req.user.id !== req.params.id) {
-    return next(new Error("You are not authorized to access this resource", 403))
-}
+        if (req.user.id !== req.params.id) {
+            return next(new Error("You are not authorized to access this resource", 403))
+        }
 
         const subscriptions = await Subscription.find({ user: req.params.id });
-        
+
         res.status(200).json({
             success: true,
             message: "Subscriptions retrieved successfully",
