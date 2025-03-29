@@ -3,6 +3,7 @@ import Subscription from '../models/subscription.model';
 import dayjs from 'dayjs';
 import { log } from 'console';
 import { sendReminderEmail } from '../utils/sendEmail';
+import { now } from 'mongoose';
 const require = createRequire(import.meta.url);
 const { serve } = require('@upstash/workflow/express');
 
@@ -28,7 +29,10 @@ export const sendReminders = serve(async (context) => {
             await sleepUntilReminder(context, `${daysBefore} days before reminder`, remiderDate)
         }
 
-        await triggerReminder(context,`Reminder ${daysBefore} days before`, subscription)
+        if (dayjs().isSame(remiderDate, "day")) {
+            await triggerReminder(context, `Reminder ${daysBefore} days before`, subscription)
+
+        }
     }
 
 
@@ -43,18 +47,18 @@ const sleepUntilReminder = async (context, label, date) => {
 
 }
 
-const triggerReminder = async(context, label, subscription) => {
-        return await context.run(label, async () => {
-            console.log('Triggering reminder');
-            // sms , email ...
+const triggerReminder = async (context, label, subscription) => {
+    return await context.run(label, async () => {
+        console.log('Triggering reminder');
+        // sms , email ...
 
-            await sendReminderEmail({
-                to: subscription.user.email,
-                type: label,
-                subscription
-            })
-            
+        await sendReminderEmail({
+            to: subscription.user.email,
+            type: label,
+            subscription
         })
+
+    })
 }
 
 const fetchSubscription = async (context, subscriptionId) => {
